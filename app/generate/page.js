@@ -98,10 +98,10 @@ if (!isSignedIn) {
     return (
       <div className="container mx-auto px-6">
         <div className="mt-10 mb-14 flex flex-col items-center">
-          <h1 className="text-4xl font-semibold mb-8">Create Your Flashcards!</h1>
+          <h1 className="text-4xl font-semibold mb-8">Hold Up!</h1>
           <div className="w-full bg-gray-100 shadow-lg rounded-xl p-8 flex flex-col items-center">
             <p className="text-blue-600">
-              Please log in to access the flashcard generator.
+              Please log in or create an account to access the flashcard generator.
             </p>
           </div>
         </div>

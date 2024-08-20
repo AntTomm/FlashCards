@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "FlashBrain AI",
-  description: "Anthony Tommaso",
+  description: "Need to study but don't wanna use a website that's filled with ads AND you have to make your own flashcards? Not to worry - FlashBrain AI is here!",
 };
 
 export default function RootLayout({ children }) {

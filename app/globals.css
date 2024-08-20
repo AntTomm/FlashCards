@@ -1,13 +1,28 @@
-
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
 html, body {
   height: 100%;
   margin: 0;
-  background: linear-gradient(to bottom, #4E65FF, #92EFFD)
+  background: linear-gradient(to bottom, #de6161, #92EFFD);
+}
+
+#root, .container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in-text {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.fade-in-text2 {
+  animation: fadeIn 2s ease-in-out;
 }

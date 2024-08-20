@@ -1,119 +1,93 @@
-import Image from "next/image"
-import getStripe from "@/utils/get-stripe"
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
-import { AppBar, Container, Toolbar, Typography, Button, Box, Grid } from "@mui/material"
-import Head from "next/head"
+import Image from "next/image";
+import getStripe from "@/utils/get-stripe";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { AppBar, Container, Toolbar, Typography, Button, Box, Grid } from "@mui/material";
+import Head from "next/head";
+
+function Footer() {
+  return (
+    <Box
+      sx={{
+        background: 'linear-gradient(to left, #de6161, #92EFFD)',
+        color: 'white',
+        textAlign: 'center',
+        py: 2, 
+        mt: 'auto', 
+      }}>
+      <Typography variant="body3">
+        © 2024 Created by Anthony Tommaso.
+      </Typography>
+    </Box>
+  );
+}
 
 export default function Home() {
+  
   return (
-    <Container maxWidth="lg"
+    <Box
       sx={{
-        background: 'linear-gradient(to bottom, #4E65FF, #92EFFD)', // Corrected the closing parenthesis
+        background: 'linear-gradient(to bottom, #de6161, #92EFFD)', 
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-      }}>
+      }}
+      >
       <Head>
-        <title>Flashcard SaaS</title>
-        <meta name="description" content='Create flashcards from your own text!' />
+        <title>FlashBrain AI</title>
+        <meta name="description" content='FlashBrain AI: the most innovative study buddy!' />
       </Head>
 
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>Flashcard</Typography>
-          <SignedOut>
-            <Button color="inherit" href="/Sign-in">Lock in</Button>
-            <Button color="inherit" href="/Sign-up">Sign Up</Button>
-            <Button color="inherit">Features</Button>
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-            <Button color="inherit">Features</Button>
-          </SignedIn>
-        </Toolbar>
-      </AppBar>
+      <Container maxWidth="lg">
+        <AppBar
+            position="relative" 
+            sx={{
+                background: 'linear-gradient(to right, #de6161, #92EFFD)',
+                boxShadow: 3,
+                borderRadius: 2,
+                mt: 1, 
+                mx: 2, 
+                px: 2, 
+                py: 1, 
+                width: 'calc(100% - px)', 
+            }}
+        >
+          <Toolbar>
+            <Typography variant="h6" style={{ flexGrow: 2 }}>FlashBrain AI</Typography>
+            <SignedOut>
+            <Button color="inherit" sx={{ marginRight: 25 }} href="/Explanation">What is this?</Button>
+              <Button color="inherit" href="/Sign-in">Lock in</Button>
+              <Button color="inherit" href="/Sign-up">Sign Up</Button>
+              <Button color="inherit" href="/Features">Features</Button>
+              <Button color="inherit" href="/Prices">Pricing</Button>
+            </SignedOut>
+            <SignedIn>
+            <Button color="inherit" sx={{ marginRight: 25 }} href="/Explanation">What is this?</Button>
+              <UserButton />
+              <Button color="inherit" sx={{ marginLeft: 1 }}href="/flashcards">your sets</Button>
+              <Button color="inherit" sx={{ marginRight: 2 }}href="/Features">Features</Button>
+              <Button color="inherit" href="/Prices">Pricing</Button>
+            </SignedIn>
+          </Toolbar>
+        </AppBar>
+      </Container>
 
       <Box sx={{
         textAlign: 'center',
-        my: 2,
+        my: 40,
       }}>
-        <Typography variant="h2">Welcome to your new study system.</Typography>
-        <Typography variant="h5">
-          {' '}
+        <Typography variant="h2" className="fade-in-text">Welcome to your new study system.</Typography>
+        <Typography variant="h5" className="fade-in-text2">
           The MOST EFFICIENT method for crafting flashcards from the ground up.
         </Typography>
-        <Button variant='contained' color='primary' sx={{ mt: 2 }}>Jump In</Button>
-      </Box>
-      <Box sx={{ my: 5 }}>
-        <Typography variant="h4">
-          Features:
-        </Typography>
-        <Grid container spacing={4}> {/* Corrected 'contained' to 'container' */}
-          <Grid item xs={12} md={4}> {/* Corrected 'items' to 'item' */}
-            <Typography variant="h6">Effortless Text Entry</Typography>
-            <Typography>Just drop in your text, and watch our software work its magic. Flashcard creation has never been this simple—or this fun!
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container spacing={4}> {/* Corrected 'contained' to 'container' */}
-          <Grid item xs={12} md={4}> {/* Corrected 'items' to 'item' */}
-            <Typography variant="h6">Seamless OpenAI Integration</Typography>
-            <Typography>Unlock the power of AI with a single click. Integrate OpenAI effortlessly and elevate your flashcard creation to a whole new level!
-            </Typography>
-          </Grid>
-          <Grid container spacing={4}> {/* Corrected 'contained' to 'container' */}
-            <Grid item xs={12} md={4}> {/* Corrected 'items' to 'item' */}
-              <Typography variant="h6">Easily Accessible</Typography>
-              <Typography>Access your flashcards anytime, anywhere.
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
+        <Button variant='contained' color='primary' sx={{ mt: 2 }} href="/generate">Lets Go!</Button>
       </Box>
       <Box sx={{ my: 6, textAlign: 'center' }}>
-        <Typography variant="h4">Pricing</Typography>
         <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12} md={4}>
-            <Box
-              sx={{
-                p: 3,
-                border: '1px solid',
-                borderColor: 'grey.300',
-                borderRadius: 2,
-              }}
-            >
-              <Typography variant="h5">Basic</Typography>
-              <Typography variant="h6">$5.00 / month</Typography>
-              <Typography>
-                Access to basic flashcard features & limited storage capacity.
-              </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 1 }}>
-                Choose Basic
-              </Button>
-            </Box>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Box
-              sx={{
-                p: 3,
-                border: '1px solid',
-                borderColor: 'grey.300',
-                borderRadius: 2,
-              }}
-            >
-              <Typography variant="h5">Pro</Typography>
-              <Typography variant="h6">$10.00 / month</Typography>
-              <Typography>
-                Unlimited flashcards & storage, with priority customer support!
-              </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 1 }}>
-                Choose Pro
-              </Button>
-            </Box>
           </Grid>
         </Grid>
       </Box>
-    </Container>
+      <Footer/>
+    </Box>
   );
 }

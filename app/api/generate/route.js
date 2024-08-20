@@ -46,7 +46,7 @@ export async function POST(req){
 
         const content = completion.choices[0].message.content.trim();
 
-        // Verify if the content is a valid JSON string
+       
         let flashcards;
         try {
             flashcards = JSON.parse(content);

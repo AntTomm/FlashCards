@@ -36,19 +36,23 @@ export default function Generate() {
     const router = useRouter();
     
     const handleSubmit = async () => {
-        fetch('/api/generate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text }), 
-        })
-        .then((res) => res.json())
-        .then((data) => setFlashcards(data))
-        .catch((error) => {
-            console.error("Error fetching flashcards:", error);
+        const prompt = text.trim();
+        if (!prompt) return;
+      
+        const res = await fetch("/api/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),   // <-- send `prompt`
         });
-    };
+      
+        const data = await res.json();
+        if (!res.ok) {
+          console.error("Generate failed:", data);
+          alert(data?.error || "Failed to generate");
+          return;
+        }
+        setFlashcards(data); // your route returns an array
+      };
 
     const handleCardClick = (id) => {
         setFlipped((prev) => ({

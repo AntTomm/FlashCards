@@ -30,34 +30,60 @@ Return in the following JSON format:
 }
 `;
 
-export async function POST(req){
+export async function POST(req) {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
+  
     try {
-        const data = await req.text();
-
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4.1-mini",
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: data },
-            ],
-        });
-
-        const content = completion.choices[0].message.content.trim();
-
-       
-        let flashcards;
-        try {
-            flashcards = JSON.parse(content);
-        } catch (e) {
-            console.error("Failed to parse JSON from OpenAI response:", content);
-            return NextResponse.json({ error: "Failed to parse JSON from OpenAI response" }, { status: 500 });
+      // Accept either JSON {prompt} or raw text
+      let userInput = "";
+      const type = req.headers.get("content-type") || "";
+      if (type.includes("application/json")) {
+        const body = await req.json();
+        userInput = typeof body === "string" ? body : body?.prompt ?? "";
+      } else {
+        userInput = await req.text();
+      }
+  
+      if (!userInput?.trim()) {
+        return NextResponse.json({ error: "Empty prompt" }, { status: 400 });
+      }
+  
+      const r = await openai.responses.create({
+        model: "gpt-4.1-mini",
+        input: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userInput }
+        ],
+        text: { 
+            format: { type: "json_object" }
         }
-
-        return NextResponse.json(flashcards.flashcards);
-    } catch (error) {
-        console.error("Error in processing the request:", error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+      });
+  
+      const text = r.output_text; 
+  
+      let parsed;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        console.error("Model returned non-JSON:", text);
+        return NextResponse.json(
+          { error: "Model returned malformed JSON" },
+          { status: 502 }
+        );
+      }
+  
+      if (!parsed?.flashcards || !Array.isArray(parsed.flashcards)) {
+        return NextResponse.json(
+          { error: "Missing flashcards[] in response" },
+          { status: 502 }
+        );
+      }
+  
+      return NextResponse.json(parsed.flashcards, { status: 200 });
+    } catch (err) {
+      const status = err.status ?? err.response?.status ?? 500;
+      const details = err.response?.data ?? err.message ?? "unknown";
+      console.error("OpenAI upstream:", status, details);
+      return NextResponse.json({ error: "Upstream", status, details }, { status });
     }
-}
+  }
